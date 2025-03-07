@@ -1,0 +1,120 @@
+<html>
+<head>
+<title>CustomStoryActivity.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #6aab73;}
+.s4 { color: #2aacb8;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+CustomStoryActivity.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">muse</span><span class="s2">.</span><span class="s1">writers</span><span class="s2">;</span>
+
+<span class="s0">import </span><span class="s1">android</span><span class="s2">.</span><span class="s1">content</span><span class="s2">.</span><span class="s1">Context</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">android</span><span class="s2">.</span><span class="s1">content</span><span class="s2">.</span><span class="s1">Intent</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">android</span><span class="s2">.</span><span class="s1">database</span><span class="s2">.</span><span class="s1">Cursor</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">android</span><span class="s2">.</span><span class="s1">database</span><span class="s2">.</span><span class="s1">sqlite</span><span class="s2">.</span><span class="s1">SQLiteDatabase</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">android</span><span class="s2">.</span><span class="s1">database</span><span class="s2">.</span><span class="s1">sqlite</span><span class="s2">.</span><span class="s1">SQLiteOpenHelper</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">android</span><span class="s2">.</span><span class="s1">os</span><span class="s2">.</span><span class="s1">Bundle</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">android</span><span class="s2">.</span><span class="s1">view</span><span class="s2">.</span><span class="s1">MenuItem</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">android</span><span class="s2">.</span><span class="s1">view</span><span class="s2">.</span><span class="s1">View</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">android</span><span class="s2">.</span><span class="s1">widget</span><span class="s2">.</span><span class="s1">AdapterView</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">android</span><span class="s2">.</span><span class="s1">widget</span><span class="s2">.</span><span class="s1">ArrayAdapter</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">android</span><span class="s2">.</span><span class="s1">widget</span><span class="s2">.</span><span class="s1">Button</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">android</span><span class="s2">.</span><span class="s1">widget</span><span class="s2">.</span><span class="s1">Spinner</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">android</span><span class="s2">.</span><span class="s1">widget</span><span class="s2">.</span><span class="s1">TextView</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">androidx</span><span class="s2">.</span><span class="s1">appcompat</span><span class="s2">.</span><span class="s1">app</span><span class="s2">.</span><span class="s1">AppCompatActivity</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">androidx</span><span class="s2">.</span><span class="s1">appcompat</span><span class="s2">.</span><span class="s1">widget</span><span class="s2">.</span><span class="s1">Toolbar</span><span class="s2">;</span>
+
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">util</span><span class="s2">.</span><span class="s1">ArrayList</span><span class="s2">;</span>
+
+<span class="s0">public class </span><span class="s1">CustomStoryActivity </span><span class="s0">extends </span><span class="s1">AppCompatActivity </span><span class="s2">{</span>
+
+    <span class="s0">private </span><span class="s1">DatabaseHelper dbHelper</span><span class="s2">;</span>
+    <span class="s0">private </span><span class="s1">Spinner shapeSpinner</span><span class="s2">, </span><span class="s1">narrativeSpinner</span><span class="s2">, </span><span class="s1">themeSpinner</span><span class="s2">, </span><span class="s1">settingSpinner</span><span class="s2">;</span>
+    <span class="s0">private </span><span class="s1">Button generateButton</span><span class="s2">;</span>
+
+    <span class="s1">@Override</span>
+    <span class="s0">protected void </span><span class="s1">onCreate</span><span class="s2">(</span><span class="s1">Bundle savedInstanceState</span><span class="s2">) {</span>
+        <span class="s0">super</span><span class="s2">.</span><span class="s1">onCreate</span><span class="s2">(</span><span class="s1">savedInstanceState</span><span class="s2">);</span>
+        <span class="s1">setContentView</span><span class="s2">(</span><span class="s1">R</span><span class="s2">.</span><span class="s1">layout</span><span class="s2">.</span><span class="s1">activity_custom_story</span><span class="s2">);</span>
+
+        <span class="s1">Toolbar toolbar </span><span class="s2">= </span><span class="s1">findViewById</span><span class="s2">(</span><span class="s1">R</span><span class="s2">.</span><span class="s1">id</span><span class="s2">.</span><span class="s1">toolbar</span><span class="s2">);</span>
+        <span class="s1">setSupportActionBar</span><span class="s2">(</span><span class="s1">toolbar</span><span class="s2">);</span>
+        <span class="s0">if </span><span class="s2">(</span><span class="s1">getSupportActionBar</span><span class="s2">() != </span><span class="s0">null</span><span class="s2">) {</span>
+            <span class="s1">getSupportActionBar</span><span class="s2">().</span><span class="s1">setDisplayHomeAsUpEnabled</span><span class="s2">(</span><span class="s0">true</span><span class="s2">);</span>
+        <span class="s2">}</span>
+
+        <span class="s1">dbHelper </span><span class="s2">= </span><span class="s0">new </span><span class="s1">DatabaseHelper</span><span class="s2">(</span><span class="s0">this</span><span class="s2">);</span>
+        <span class="s1">shapeSpinner </span><span class="s2">= </span><span class="s1">findViewById</span><span class="s2">(</span><span class="s1">R</span><span class="s2">.</span><span class="s1">id</span><span class="s2">.</span><span class="s1">spinner_shape</span><span class="s2">);</span>
+        <span class="s1">narrativeSpinner </span><span class="s2">= </span><span class="s1">findViewById</span><span class="s2">(</span><span class="s1">R</span><span class="s2">.</span><span class="s1">id</span><span class="s2">.</span><span class="s1">spinner_narrative</span><span class="s2">);</span>
+        <span class="s1">themeSpinner </span><span class="s2">= </span><span class="s1">findViewById</span><span class="s2">(</span><span class="s1">R</span><span class="s2">.</span><span class="s1">id</span><span class="s2">.</span><span class="s1">spinner_theme</span><span class="s2">);</span>
+        <span class="s1">settingSpinner </span><span class="s2">= </span><span class="s1">findViewById</span><span class="s2">(</span><span class="s1">R</span><span class="s2">.</span><span class="s1">id</span><span class="s2">.</span><span class="s1">spinner_setting</span><span class="s2">);</span>
+        <span class="s1">generateButton </span><span class="s2">= </span><span class="s1">findViewById</span><span class="s2">(</span><span class="s1">R</span><span class="s2">.</span><span class="s1">id</span><span class="s2">.</span><span class="s1">btn_generate</span><span class="s2">);</span>
+
+        <span class="s1">setupSpinner</span><span class="s2">(</span><span class="s1">shapeSpinner</span><span class="s2">, </span><span class="s3">&quot;story_shapes&quot;</span><span class="s2">);</span>
+        <span class="s1">setupSpinner</span><span class="s2">(</span><span class="s1">narrativeSpinner</span><span class="s2">, </span><span class="s3">&quot;narrative_types&quot;</span><span class="s2">);</span>
+        <span class="s1">setupSpinner</span><span class="s2">(</span><span class="s1">themeSpinner</span><span class="s2">, </span><span class="s3">&quot;themes&quot;</span><span class="s2">);</span>
+        <span class="s1">setupSpinner</span><span class="s2">(</span><span class="s1">settingSpinner</span><span class="s2">, </span><span class="s3">&quot;settings&quot;</span><span class="s2">);</span>
+
+        <span class="s1">generateButton</span><span class="s2">.</span><span class="s1">setOnClickListener</span><span class="s2">(</span><span class="s0">new </span><span class="s1">View</span><span class="s2">.</span><span class="s1">OnClickListener</span><span class="s2">() {</span>
+            <span class="s1">@Override</span>
+            <span class="s0">public void </span><span class="s1">onClick</span><span class="s2">(</span><span class="s1">View v</span><span class="s2">) {</span>
+                <span class="s1">generateCustomStory</span><span class="s2">();</span>
+            <span class="s2">}</span>
+        <span class="s2">});</span>
+    <span class="s2">}</span>
+
+    <span class="s1">@Override</span>
+    <span class="s0">public boolean </span><span class="s1">onOptionsItemSelected</span><span class="s2">(</span><span class="s1">MenuItem item</span><span class="s2">) {</span>
+        <span class="s0">if </span><span class="s2">(</span><span class="s1">item</span><span class="s2">.</span><span class="s1">getItemId</span><span class="s2">() == </span><span class="s1">android</span><span class="s2">.</span><span class="s1">R</span><span class="s2">.</span><span class="s1">id</span><span class="s2">.</span><span class="s1">home</span><span class="s2">) {</span>
+            <span class="s1">finish</span><span class="s2">();</span>
+            <span class="s0">return true</span><span class="s2">;</span>
+        <span class="s2">}</span>
+        <span class="s0">return super</span><span class="s2">.</span><span class="s1">onOptionsItemSelected</span><span class="s2">(</span><span class="s1">item</span><span class="s2">);</span>
+    <span class="s2">}</span>
+
+    <span class="s0">private void </span><span class="s1">setupSpinner</span><span class="s2">(</span><span class="s1">Spinner spinner</span><span class="s2">, </span><span class="s1">String tableName</span><span class="s2">) {</span>
+        <span class="s1">SQLiteDatabase db </span><span class="s2">= </span><span class="s1">dbHelper</span><span class="s2">.</span><span class="s1">getReadableDatabase</span><span class="s2">();</span>
+        <span class="s1">Cursor cursor </span><span class="s2">= </span><span class="s1">db</span><span class="s2">.</span><span class="s1">rawQuery</span><span class="s2">(</span><span class="s3">&quot;SELECT name FROM &quot; </span><span class="s2">+ </span><span class="s1">tableName</span><span class="s2">, </span><span class="s0">null</span><span class="s2">);</span>
+
+        <span class="s1">ArrayList</span><span class="s2">&lt;</span><span class="s1">String</span><span class="s2">&gt; </span><span class="s1">items </span><span class="s2">= </span><span class="s0">new </span><span class="s1">ArrayList</span><span class="s2">&lt;&gt;();</span>
+        <span class="s0">while </span><span class="s2">(</span><span class="s1">cursor</span><span class="s2">.</span><span class="s1">moveToNext</span><span class="s2">()) {</span>
+            <span class="s1">items</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s1">cursor</span><span class="s2">.</span><span class="s1">getString</span><span class="s2">(</span><span class="s4">0</span><span class="s2">));</span>
+        <span class="s2">}</span>
+        <span class="s1">cursor</span><span class="s2">.</span><span class="s1">close</span><span class="s2">();</span>
+
+        <span class="s0">if </span><span class="s2">(</span><span class="s1">items</span><span class="s2">.</span><span class="s1">isEmpty</span><span class="s2">()) {</span>
+            <span class="s1">items</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s3">&quot;No options available&quot;</span><span class="s2">);</span>
+        <span class="s2">}</span>
+
+        <span class="s1">ArrayAdapter</span><span class="s2">&lt;</span><span class="s1">String</span><span class="s2">&gt; </span><span class="s1">adapter </span><span class="s2">= </span><span class="s0">new </span><span class="s1">ArrayAdapter</span><span class="s2">&lt;&gt;(</span><span class="s0">this</span><span class="s2">, </span><span class="s1">android</span><span class="s2">.</span><span class="s1">R</span><span class="s2">.</span><span class="s1">layout</span><span class="s2">.</span><span class="s1">simple_spinner_item</span><span class="s2">, </span><span class="s1">items</span><span class="s2">);</span>
+        <span class="s1">adapter</span><span class="s2">.</span><span class="s1">setDropDownViewResource</span><span class="s2">(</span><span class="s1">android</span><span class="s2">.</span><span class="s1">R</span><span class="s2">.</span><span class="s1">layout</span><span class="s2">.</span><span class="s1">simple_spinner_dropdown_item</span><span class="s2">);</span>
+        <span class="s1">spinner</span><span class="s2">.</span><span class="s1">setAdapter</span><span class="s2">(</span><span class="s1">adapter</span><span class="s2">);</span>
+    <span class="s2">}</span>
+
+    <span class="s0">private void </span><span class="s1">generateCustomStory</span><span class="s2">() {</span>
+        <span class="s1">String shape </span><span class="s2">= </span><span class="s1">shapeSpinner</span><span class="s2">.</span><span class="s1">getSelectedItem</span><span class="s2">().</span><span class="s1">toString</span><span class="s2">();</span>
+        <span class="s1">String narrative </span><span class="s2">= </span><span class="s1">narrativeSpinner</span><span class="s2">.</span><span class="s1">getSelectedItem</span><span class="s2">().</span><span class="s1">toString</span><span class="s2">();</span>
+        <span class="s1">String theme </span><span class="s2">= </span><span class="s1">themeSpinner</span><span class="s2">.</span><span class="s1">getSelectedItem</span><span class="s2">().</span><span class="s1">toString</span><span class="s2">();</span>
+        <span class="s1">String setting </span><span class="s2">= </span><span class="s1">settingSpinner</span><span class="s2">.</span><span class="s1">getSelectedItem</span><span class="s2">().</span><span class="s1">toString</span><span class="s2">();</span>
+
+        <span class="s1">Intent intent </span><span class="s2">= </span><span class="s0">new </span><span class="s1">Intent</span><span class="s2">(</span><span class="s1">CustomStoryActivity</span><span class="s2">.</span><span class="s0">this</span><span class="s2">, </span><span class="s1">CustomStoryOutputActivity</span><span class="s2">.</span><span class="s0">class</span><span class="s2">);</span>
+        <span class="s1">intent</span><span class="s2">.</span><span class="s1">putExtra</span><span class="s2">(</span><span class="s3">&quot;shape&quot;</span><span class="s2">, </span><span class="s1">shape</span><span class="s2">);</span>
+        <span class="s1">intent</span><span class="s2">.</span><span class="s1">putExtra</span><span class="s2">(</span><span class="s3">&quot;narrative&quot;</span><span class="s2">, </span><span class="s1">narrative</span><span class="s2">);</span>
+        <span class="s1">intent</span><span class="s2">.</span><span class="s1">putExtra</span><span class="s2">(</span><span class="s3">&quot;theme&quot;</span><span class="s2">, </span><span class="s1">theme</span><span class="s2">);</span>
+        <span class="s1">intent</span><span class="s2">.</span><span class="s1">putExtra</span><span class="s2">(</span><span class="s3">&quot;setting&quot;</span><span class="s2">, </span><span class="s1">setting</span><span class="s2">);</span>
+        <span class="s1">startActivity</span><span class="s2">(</span><span class="s1">intent</span><span class="s2">);</span>
+    <span class="s2">}</span>
+<span class="s2">}</span>
+</pre>
+</body>
+</html>
